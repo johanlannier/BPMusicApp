@@ -3,8 +3,10 @@
     package="fr.lannier.iem.bpmusicapp" >
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".BPMApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
