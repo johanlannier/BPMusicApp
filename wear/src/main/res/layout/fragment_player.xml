@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wear.widget.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey"
+    android:padding="@dimen/box_inset_layout_padding"
+    tools:context=".Activity.Fragment.Player"
+    tools:deviceIds="wear">
+
+
+    <FrameLayout
+        android:id="@+id/contentMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:boxedEdges="all">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewTitre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="120dp"
+                android:text="rhgre"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/textViewArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ergerg"
+                android:layout_marginTop="5dp"
+               android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="-10dp">
+
+                <ImageView
+                    android:id="@+id/imageViewSongBefore"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_left" />
+
+                <ImageView
+                    android:id="@+id/imageViewPlay"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:src="@drawable/play"/>
+
+                <ImageView
+                    android:id="@+id/imageViewSongAfter"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:src="@drawable/arrow_right" />
+
+            </LinearLayout>
+
+            <!-- <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="-15dp">
+
+                <ImageView
+                    android:id="@+id/imageViewVolumeMoins"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_marginStart="30dp"
+                    android:src=""/>
+
+                <ImageView
+                    android:id="@+id/imageViewVolumePlus"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_marginStart="5dp"
+                    android:src=""/>
+
+            </LinearLayout> -->
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</android.support.wear.widget.BoxInsetLayout>

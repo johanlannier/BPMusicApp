@@ -1,61 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.wear.widget.BoxInsetLayout
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/dark_grey"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="fr.lannier.iem.bpmusicapp.MainActivity"
-    tools:deviceIds="wear"
-    android:padding="@dimen/box_inset_layout_padding">
+    android:layout_height="match_parent">
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:boxedEdges="all">
-
-    <LinearLayout
+    <android.support.wearable.view.GridViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_height="match_parent" />
 
+    <android.support.wearable.view.DotsPageIndicator
+        android:id="@+id/page_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:background="@drawable/rounded_background">
+    </android.support.wearable.view.DotsPageIndicator>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/textViewRythmeRunner"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="--  ❤️"
-                android:textSize="24sp" />
-
-
-            <TextView
-                android:id="@+id/textViewRythmeDefined"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:text="-- 🎵"
-                android:textSize="24sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-</FrameLayout>
-</android.support.wear.widget.BoxInsetLayout>
+</RelativeLayout>
