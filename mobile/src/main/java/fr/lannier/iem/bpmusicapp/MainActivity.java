@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import fr.lannier.iem.bpmusicapp.Adapters.PlaylistsAdapter;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
     private ListView lv_playlists;
     private List<Playlist> ListPlaylists;
     private List<Track> listTracks;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,25 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
+    }
+
+    public void playTrack(String trackId, int index2){
+        mPlayer.playUri(null, "spotify:track:" + trackId, 0,0);
+        index = index2 + 1;
+    }
+
+    public void resetTracks(){
+        index = 0;
+    }
+
+    public void nextTrack(){
+        playTrack(listTracks.get(index).getId(), index);
+    }
+
+    public void previousTrack(){
+        if(index != 0){
+            playTrack(listTracks.get(index - 1).getId(), index - 1);
+        }
     }
 
     public void SendTracksToWatch(List<Track> tracks){
@@ -142,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements
                             playlist_Id=ListPlaylists.get(position).getId();
                             Toast.makeText(MainActivity.this, "Playlist sélectionnée", Toast.LENGTH_SHORT).show();
                             GetTracks();
+                            resetTracks();
                         }
                     });
                 }
@@ -185,10 +207,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
         Log.d("MainActivity", "Playback event received: " + playerEvent.name());
-        switch (playerEvent) {
-            // Handle event type as necessary
-            default:
-                break;
+        if (Objects.equals(playerEvent.name(), PlayerEvent.kSpPlaybackNotifyTrackChanged.name())) {
+            nextTrack();
         }
     }
 
@@ -244,7 +264,8 @@ public class MainActivity extends AppCompatActivity implements
                     byte[] data=event.getDataItem().getData();
                     DataMap datamap=DataMap.fromByteArray(data);
                     String idTrack=datamap.getString("Track");
-                    mPlayer.playUri(null, "spotify:track:"+idTrack,0,0); //a replacer par méthode de Nico
+                    int indexTrack=datamap.getInt("indexTrack");
+                    playTrack(idTrack, indexTrack);
                 }
             }
         }
