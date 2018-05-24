@@ -115,7 +115,7 @@ public class MainActivity extends WearableActivity implements
         listViewMusics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SendSelectedTrack(pListMusic.get(position));
+                SendSelectedTrack(pListMusic.get(position), position);
             }
         });
     }
@@ -179,9 +179,10 @@ public class MainActivity extends WearableActivity implements
         Log.e("TEST","data changed");
     }
 
-    public void SendSelectedTrack(final Track track){
+    public void SendSelectedTrack(final Track track, int position){
         PutDataMapRequest dataMap = PutDataMapRequest.create("/PlayTrack");
         dataMap.getDataMap().putString("Track", track.getId());
+        dataMap.getDataMap().putInt("indexTrack", position);
         PutDataRequest request = dataMap.asPutDataRequest();
         request.setUrgent();
         Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
