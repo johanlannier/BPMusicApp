@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void playTrack(String trackId, int index2){
+        if(index2 >= listTracks.size()){
+            index2 = -1;
+        }
         mPlayer.playUri(null, "spotify:track:" + trackId, 0,0);
         index = index2 + 1;
     }
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onPlaybackEvent(PlayerEvent playerEvent) {
         Log.d("MainActivity", "Playback event received: " + playerEvent.name());
-        if (Objects.equals(playerEvent.name(), PlayerEvent.kSpPlaybackNotifyTrackChanged.name())) {
+        if (Objects.equals(playerEvent.name(), PlayerEvent.kSpPlaybackNotifyTrackChanged.name()) && !mPlayer.getPlaybackState().isPlaying) {
             nextTrack();
         }
     }
