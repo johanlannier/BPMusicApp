@@ -114,6 +114,14 @@ public class MainActivity extends AppCompatActivity implements
         index = index2 + 1;
     }
 
+    public void resumePause(){
+        if(mPlayer.getPlaybackState().isPlaying){
+            mPlayer.pause(null);
+        } else {
+            mPlayer.resume(null);
+        }
+    }
+
     public void resetTracks(){
         index = 0;
     }
