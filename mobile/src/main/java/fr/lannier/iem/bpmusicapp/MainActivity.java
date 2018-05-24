@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import com.spotify.sdk.android.player.Player;
 import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         mPlayer.playUri(null, "spotify:track:" + trackId, 0,0);
         index = index2 + 1;
+        RefreshCurrentTrack();
     }
 
     public void resumePause(){
@@ -388,5 +391,17 @@ public class MainActivity extends AppCompatActivity implements
                 });
             }
         }
+    }
+
+    public void RefreshCurrentTrack(){
+        while(!mPlayer.getPlaybackState().isPlaying){
+
+        }
+        TextView currentTitle=findViewById(R.id.currentTitle);
+        TextView currentArtists=findViewById(R.id.currentArtists);
+        ImageView currentImg=findViewById(R.id.currentImg);
+        currentArtists.setText(mPlayer.getMetadata().currentTrack.artistName);
+        currentTitle.setText(mPlayer.getMetadata().currentTrack.name);
+        Picasso.with(this).load(mPlayer.getMetadata().currentTrack.albumCoverWebUrl).into(currentImg);
     }
 }

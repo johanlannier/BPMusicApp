@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="120dp"
-                android:text="rhgre"
+                android:text="Title"
                 android:layout_marginTop="15dp"
                 android:layout_gravity="center"/>
 
@@ -35,7 +35,7 @@
                 android:id="@+id/textViewArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ergerg"
+                android:text="Artists"
                 android:layout_marginTop="5dp"
                android:layout_gravity="center"/>
 

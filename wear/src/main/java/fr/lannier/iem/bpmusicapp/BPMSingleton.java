@@ -1,7 +1,17 @@
 package fr.lannier.iem.bpmusicapp;
 
+import java.util.List;
+
+import fr.lannier.iem.bpmusicapp.Models.Track;
+
 public class BPMSingleton {
     private static final BPMSingleton ourInstance = new BPMSingleton();
+
+    public boolean isPlaying=false;
+    public String CurrentTitle="Title";
+    public String CurrentArtists="Artists";
+    public String CurrentId="null";
+    public List<Track> listTracks;
 
     private int BPM;
 
@@ -30,4 +40,6 @@ public class BPMSingleton {
     public void setBPMManual(boolean BPMManual) {
         isBPMManual = BPMManual;
     }
+
+
 }

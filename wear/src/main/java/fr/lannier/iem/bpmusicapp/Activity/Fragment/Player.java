@@ -17,6 +17,7 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
+import fr.lannier.iem.bpmusicapp.BPMSingleton;
 import fr.lannier.iem.bpmusicapp.MainActivity;
 import fr.lannier.iem.bpmusicapp.R;
 
@@ -75,8 +76,8 @@ public class Player extends Fragment {
             @Override
             public void onClick(View view) {
                 PlayPause();
-                isPlay = !isPlay;
-                if (isPlay) {
+                BPMSingleton.getInstance().isPlaying=!BPMSingleton.getInstance().isPlaying;
+                if (BPMSingleton.getInstance().isPlaying) {
                     imageViewPlay.setImageResource(R.drawable.pause);
                 }
                 else {
@@ -162,6 +163,11 @@ public class Player extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    public void RefreshCurrentMusic(String title, String artists){
+        textViewArtist.setText(artists);
+        textViewTitre.setText(title);
     }
 
     @Override

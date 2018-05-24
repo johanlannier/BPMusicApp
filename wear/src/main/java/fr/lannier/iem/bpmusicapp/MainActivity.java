@@ -56,7 +56,7 @@ public class MainActivity extends WearableActivity implements
     private AdapterListMusics adapterListMusics;
     private Sensor mHeartRateSensor;
     private int currentBPM=0;
-    private List<Track> listTracks;
+    private Player playerFragment;
 
     //endregion
 
@@ -109,14 +109,16 @@ public class MainActivity extends WearableActivity implements
         SendBPMToPhone();
     }
 
-    public void Refresh(final List<Track> pListMusic){
-        AdapterListMusics adapter  = new AdapterListMusics(this, pListMusic);
+    public void Refresh(){
+        AdapterListMusics adapter  = new AdapterListMusics(this, BPMSingleton.getInstance().listTracks);
         listViewMusics = (ListView) findViewById(R.id.listViewMusics);
         listViewMusics.setAdapter(adapter);
         listViewMusics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SendSelectedTrack(pListMusic.get(position), position);
+                SendSelectedTrack(BPMSingleton.getInstance().listTracks.get(position), position);
+                BPMSingleton.getInstance().isPlaying=true;
+                playerFragment.RefreshCurrentMusic(BPMSingleton.getInstance().listTracks.get(position).getName(),BPMSingleton.getInstance().listTracks.get(position).getArtists());
             }
         });
     }
@@ -148,8 +150,8 @@ public class MainActivity extends WearableActivity implements
         listViewMusics = (ListView) findViewById(R.id.listViewMusics);
         textViewRythmeRunner = (TextView) findViewById(R.id.textViewRythmeRunner);
         textViewRythmeDefined = (TextView) findViewById(R.id.textViewRythmeDefined);
-        listTracks = new ArrayList<Track>();
-        adapterListMusics =  new AdapterListMusics(this, listTracks);
+        BPMSingleton.getInstance().listTracks = new ArrayList<Track>();
+        adapterListMusics =  new AdapterListMusics(this, BPMSingleton.getInstance().listTracks);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mHeartRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
 
@@ -169,11 +171,11 @@ public class MainActivity extends WearableActivity implements
                 byte[] data=event.getDataItem().getData();
                 DataMap datamap=DataMap.fromByteArray(data);
                 ArrayList<DataMap> listDataMap=datamap.getDataMapArrayList("Tracks");
-                listTracks=new ArrayList<>();
+                BPMSingleton.getInstance().listTracks=new ArrayList<>();
                 for(int i=0;i<listDataMap.size();i++){
-                    listTracks.add(new Track(listDataMap.get(i)));
+                    BPMSingleton.getInstance().listTracks.add(new Track(listDataMap.get(i)));
                 }
-                Refresh(listTracks);
+                Refresh();
                 //TO DO add to listView
             }
         }
@@ -204,7 +206,7 @@ public class MainActivity extends WearableActivity implements
 
         bpmParametersFragment = BPMParameters.newInstance();
         Accueil accueilFragment =  Accueil.newInstance();
-        Player playerFragment = Player.newInstance();
+        playerFragment = Player.newInstance();
 
         List<android.app.Fragment> pages = new ArrayList<>();
         pages.add(accueilFragment);
