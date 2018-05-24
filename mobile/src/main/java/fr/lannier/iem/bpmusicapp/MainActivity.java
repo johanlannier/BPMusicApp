@@ -93,30 +93,32 @@ public class MainActivity extends AppCompatActivity implements
         new StartWearableActivityTask().execute();
     }
 
-    public void GetTracks(){
-        Call<List<Track>> call = BPMApp.getBPMService().getTracksByBPM(token, playlist_Id, 80);
-        call.enqueue(new Callback<List<Track>>() {
-            @Override
-            public void onResponse(retrofit2.Call<List<Track>> call, Response<List<Track>> response) {
-                listTracks = response.body();
-                if (response.code() == 200) {
-                    SendTracksToWatch(listTracks);
+    public void GetTracks(int bpm){
+        if(playlist_Id != "") {
+            Call<List<Track>> call = BPMApp.getBPMService().getTracksByBPM(token, playlist_Id, bpm);
+            call.enqueue(new Callback<List<Track>>() {
+                @Override
+                public void onResponse(retrofit2.Call<List<Track>> call, Response<List<Track>> response) {
+                    listTracks = response.body();
+                    if (response.code() == 200) {
+                        SendTracksToWatch(listTracks);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(retrofit2.Call<List<Track>> call, Throwable t) {
-                Log.e("ERREUR", t.getMessage());
+                @Override
+                public void onFailure(retrofit2.Call<List<Track>> call, Throwable t) {
+                    Log.e("ERREUR", t.getMessage());
 
-            }
-        });
+                }
+            });
+        }
     }
 
     public void playTrack(String trackId, int index2){
         if(index2 >= listTracks.size()){
             index2 = -1;
         }
-        mPlayer.playUri(null, "spotify:track:" + trackId, 0,0);
+        mPlayer.playUri(null, "spotify:track:" + trackId, 0, 0);
         index = index2 + 1;
         RefreshCurrentTrack();
     }
@@ -134,7 +136,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void nextTrack(){
-        playTrack(listTracks.get(index).getId(), index);
+        if(index >= listTracks.size()){
+            index = 0;
+        } else if(listTracks.size() > 0){
+            playTrack(listTracks.get(index).getId(), index);
+        }
     }
 
     public void previousTrack(){
@@ -169,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements
             public void onResponse(retrofit2.Call<List<Playlist>> call, Response<List<Playlist>> response) {
                 ListPlaylists = response.body();
                 if (response.code() == 200) {
-                    //tmp.get(0).getName());
                     //TO DO add playlists to listview
                     lv_playlists.setAdapter(new PlaylistsAdapter(MainActivity.this, ListPlaylists));
                     lv_playlists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -177,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             playlist_Id=ListPlaylists.get(position).getId();
                             Toast.makeText(MainActivity.this, "Playlist sélectionnée, choisissez la musique sur votre montre", Toast.LENGTH_SHORT).show();
-                            GetTracks();
+                            GetTracks(80);
                             resetTracks();
                         }
                     });
@@ -275,6 +280,13 @@ public class MainActivity extends AppCompatActivity implements
                     bpm.setText(bpmData);
                 }
 
+                if(path.equals("/BPMTracks")){
+                    byte[] data=event.getDataItem().getData();
+                    DataMap datamap=DataMap.fromByteArray(data);
+                    int bpmData=datamap.getInt("BPMTracks");
+                    GetTracks(bpmData);
+                }
+
                 if(path.equals("/PlayTrack")){
                     byte[] data=event.getDataItem().getData();
                     DataMap datamap=DataMap.fromByteArray(data);
@@ -301,16 +313,28 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void SendCurrentTrack(){
+        String tmpName = "";
+        String tmpArtists = "";
+        if(listTracks.size() != 0) {
+            if(index == 0){
+                tmpName = listTracks.get(index).getName();
+                tmpArtists = listTracks.get(index).getArtists();
+            } else {
+                tmpName = listTracks.get(index-1).getName();
+                tmpArtists = listTracks.get(index-1).getArtists();
+            }
+        }
         PutDataMapRequest dataMap = PutDataMapRequest.create("/CurrentTrack");
-        dataMap.getDataMap().putString("Title", mPlayer.getMetadata().currentTrack.name);
-        dataMap.getDataMap().putString("Artists", mPlayer.getMetadata().currentTrack.artistName);
+        dataMap.getDataMap().putString("Title", tmpName);
+        dataMap.getDataMap().putString("Artists", tmpArtists);
         PutDataRequest request = dataMap.asPutDataRequest();
         request.setUrgent();
         Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+        final String finalTmpName = tmpName;
         dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
             @Override
             public void onSuccess(DataItem dataItem) {
-                Log.e("TEST","envoi reussi, CurrentSong: "+mPlayer.getMetadata().currentTrack.name);
+                Log.e("TEST","envoi reussi, CurrentSong: "+ finalTmpName);
             }
         });
     }
@@ -414,16 +438,16 @@ public class MainActivity extends AppCompatActivity implements
     public void RefreshCurrentTrack(){
         try{
             Thread.sleep(500);
+            LinearLayout player=findViewById(R.id.player);
+            player.setVisibility(View.VISIBLE);
+            TextView currentTitle=findViewById(R.id.currentTitle);
+            TextView currentArtists=findViewById(R.id.currentArtists);
+            ImageView currentImg=findViewById(R.id.currentImg);
+            currentArtists.setText(mPlayer.getMetadata().currentTrack.artistName);
+            currentTitle.setText(mPlayer.getMetadata().currentTrack.name);
+            Picasso.with(this).load(mPlayer.getMetadata().currentTrack.albumCoverWebUrl).into(currentImg);
         }catch (Exception e){
 
         }
-        LinearLayout player=findViewById(R.id.player);
-        player.setVisibility(View.VISIBLE);
-        TextView currentTitle=findViewById(R.id.currentTitle);
-        TextView currentArtists=findViewById(R.id.currentArtists);
-        ImageView currentImg=findViewById(R.id.currentImg);
-        currentArtists.setText(mPlayer.getMetadata().currentTrack.artistName);
-        currentTitle.setText(mPlayer.getMetadata().currentTrack.name);
-        Picasso.with(this).load(mPlayer.getMetadata().currentTrack.albumCoverWebUrl).into(currentImg);
     }
 }

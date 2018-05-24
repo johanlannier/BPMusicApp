@@ -56,6 +56,7 @@ public class MainActivity extends WearableActivity implements
     private AdapterListMusics adapterListMusics;
     private Sensor mHeartRateSensor;
     private int currentBPM=0;
+    private int currentBPMDefined=0;
     private Player playerFragment;
 
     //endregion
@@ -101,9 +102,14 @@ public class MainActivity extends WearableActivity implements
         textViewRythmeRunner.setText(Integer.toString(mHeartRate) + " ❤️");
 
         if (!BPMSingleton.getInstance().isBPMManual()){
-            textViewRythmeDefined.setText(String.format(Integer.toString(mHeartRate%10*10)));
+            int tmpBPM = (mHeartRate/10)*10;
+            if(tmpBPM != currentBPMDefined && tmpBPM > 50){
+                currentBPMDefined = tmpBPM;
+                textViewRythmeDefined.setText(Integer.toString(tmpBPM) + " 🎵");
+                resetTracks(tmpBPM);
+            }
         } else {
-            textViewRythmeDefined.setText(BPMSingleton.getInstance().getBPM() + "");
+            textViewRythmeDefined.setText(BPMSingleton.getInstance().getBPM() + " 🎵");
         }
         currentBPM=mHeartRate;
         SendBPMToPhone();
@@ -120,6 +126,21 @@ public class MainActivity extends WearableActivity implements
                 BPMSingleton.getInstance().isPlaying=true;
                 playerFragment.RefreshCurrentMusic(BPMSingleton.getInstance().listTracks.get(position).getName(),BPMSingleton.getInstance().listTracks.get(position).getArtists());
                 BPMSingleton.getInstance().CurrentPosition=position;
+            }
+        });
+    }
+
+    public void resetTracks(int BPM){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/BPMTracks");
+        dataMap.getDataMap().putInt("BPMTracks", BPM);
+        dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("TEST","envoi reussi, BPMTracks: ");
             }
         });
     }

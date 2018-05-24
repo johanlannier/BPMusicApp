@@ -18,11 +18,11 @@ public class BPMApp extends Application {
 
     public static void refreshService() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        String tmp = sharedPref.getString("IPServer", "192.168.43.200");
+        String tmp = sharedPref.getString("IPServer", "192.168.42.142");
 
         Retrofit.Builder mBuilder =
                 new Retrofit.Builder()
-                        .baseUrl("http://" + tmp + ":3000/")  //adresse serveur: 81.67.198.72
+                        .baseUrl("http://" + tmp + ":3000/")  //adresse serveur: 192.168.43.200
                         .addConverterFactory(GsonConverterFactory.create());
 
         OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
