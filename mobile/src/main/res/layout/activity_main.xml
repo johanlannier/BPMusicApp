@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/BPM"
-            android:text="BPM"
+            android:text="--"
             android:textSize="42sp"
             android:gravity="center"/>
         <TextView
@@ -30,17 +30,19 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
-        android:background="@color/common_google_signin_btn_text_light_disabled"
+        android:id="@+id/player"
+        android:background="#728fcc"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/currentImg"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="10sp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,6 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
+                android:textAlignment="center"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -62,17 +66,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Artists"
-                android:textStyle="bold" />
+                android:textSize="15sp"
+                android:textStyle="bold|italic" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:background="#000000"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        />
 
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="Sélectionnez une playlist: "/>
 
 <ListView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:choiceMode="singleChoice"
+    android:listSelector="#DEDEDE"
     android:id="@+id/lv_playlists">
 </ListView>
 </LinearLayout>

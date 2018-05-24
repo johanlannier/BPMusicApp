@@ -119,6 +119,7 @@ public class MainActivity extends WearableActivity implements
                 SendSelectedTrack(BPMSingleton.getInstance().listTracks.get(position), position);
                 BPMSingleton.getInstance().isPlaying=true;
                 playerFragment.RefreshCurrentMusic(BPMSingleton.getInstance().listTracks.get(position).getName(),BPMSingleton.getInstance().listTracks.get(position).getArtists());
+                BPMSingleton.getInstance().CurrentPosition=position;
             }
         });
     }
@@ -177,6 +178,14 @@ public class MainActivity extends WearableActivity implements
                 }
                 Refresh();
                 //TO DO add to listView
+            }
+
+            if(path.equals("/CurrentTrack")){
+                byte[] data=event.getDataItem().getData();
+                DataMap datamap=DataMap.fromByteArray(data);
+                BPMSingleton.getInstance().CurrentTitle=datamap.getString("Title");
+                BPMSingleton.getInstance().CurrentArtists=datamap.getString("Artists");
+                playerFragment.RefreshCurrentMusic(BPMSingleton.getInstance().CurrentTitle,BPMSingleton.getInstance().CurrentArtists);
             }
         }
         Log.e("TEST","data changed");

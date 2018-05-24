@@ -31,8 +31,8 @@
                         android:id="@+id/textViewRythmeRunner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/rythmeRunner"
                         android:textSize="24sp" />
 
@@ -41,8 +41,8 @@
                         android:id="@+id/textViewRythmeDefined"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="@string/rythmeDefined"
                         android:textSize="24sp" />
 

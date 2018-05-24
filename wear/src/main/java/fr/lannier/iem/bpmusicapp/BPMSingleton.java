@@ -11,6 +11,7 @@ public class BPMSingleton {
     public String CurrentTitle="Title";
     public String CurrentArtists="Artists";
     public String CurrentId="null";
+    public int CurrentPosition=0;
     public List<Track> listTracks;
 
     private int BPM;

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -175,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             playlist_Id=ListPlaylists.get(position).getId();
-                            Toast.makeText(MainActivity.this, "Playlist sélectionnée", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "Playlist sélectionnée, choisissez la musique sur votre montre", Toast.LENGTH_SHORT).show();
                             GetTracks();
                             resetTracks();
                         }
@@ -284,10 +285,12 @@ public class MainActivity extends AppCompatActivity implements
 
                 if(path.equals("/NextTrack")){
                     nextTrack();
+                    SendCurrentTrack();
                 }
 
                 if(path.equals("/PreviousTrack")){
                     previousTrack();
+                    SendCurrentTrack();
                 }
 
                 if(path.equals("/PlayPause")){
@@ -295,6 +298,21 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         }
+    }
+
+    public void SendCurrentTrack(){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/CurrentTrack");
+        dataMap.getDataMap().putString("Title", mPlayer.getMetadata().currentTrack.name);
+        dataMap.getDataMap().putString("Artists", mPlayer.getMetadata().currentTrack.artistName);
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("TEST","envoi reussi, CurrentSong: "+mPlayer.getMetadata().currentTrack.name);
+            }
+        });
     }
 
     @WorkerThread
@@ -394,9 +412,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void RefreshCurrentTrack(){
-        while(!mPlayer.getPlaybackState().isPlaying){
+        try{
+            Thread.sleep(500);
+        }catch (Exception e){
 
         }
+        LinearLayout player=findViewById(R.id.player);
+        player.setVisibility(View.VISIBLE);
         TextView currentTitle=findViewById(R.id.currentTitle);
         TextView currentArtists=findViewById(R.id.currentArtists);
         ImageView currentImg=findViewById(R.id.currentImg);
