@@ -76,6 +76,7 @@ public class BPMParameters extends Fragment {
             public void onClick(View view) {
                 isBPMDefault = !isBPMDefault;
                 if (isBPMDefault) {
+                    BPMSingleton.getInstance().setBPMManual(false);
                     imageViewHand.setImageResource(R.drawable.handbarre);
                 }
                 else {
