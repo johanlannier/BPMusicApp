@@ -1,5 +1,6 @@
 package fr.lannier.iem.bpmusicapp;
 
+import android.Manifest;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -73,7 +74,6 @@ public class MainActivity extends WearableActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        StopSensor();
         Wearable.getDataClient(this).removeListener(this);
         }
 
@@ -173,6 +173,7 @@ public class MainActivity extends WearableActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupViews();
+        requestPermissions(new String[]{Manifest.permission.BODY_SENSORS},1);
         listViewMusics = (ListView) findViewById(R.id.listViewMusics);
         textViewRythmeRunner = (TextView) findViewById(R.id.textViewRythmeRunner);
         textViewRythmeDefined = (TextView) findViewById(R.id.textViewRythmeDefined);

@@ -1,15 +1,21 @@
 package fr.lannier.iem.bpmusicapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -90,8 +96,48 @@ public class MainActivity extends AppCompatActivity implements
         AuthenticationClient.openLoginActivity(this, 1337, request);
         lv_playlists=findViewById(R.id.lv_playlists);
 
+        TextView editIPtv=findViewById(R.id.editIP);
+        editIPtv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editIP();
+            }
+        });
+
         new StartWearableActivityTask().execute();
     }
+
+    public void editIP() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Adresse IP du serveur :");
+
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        builder.setView(input);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String tmp = sharedPref.getString("IPServer", "192.168.42.142");
+        input.setText(tmp);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor prefsEdit = prefs.edit();
+                prefsEdit.putString("IPServer", input.getText().toString());
+                prefsEdit.apply();
+                BPMApp.refreshService();
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
 
     public void GetTracks(int bpm){
         if(playlist_Id != "") {
