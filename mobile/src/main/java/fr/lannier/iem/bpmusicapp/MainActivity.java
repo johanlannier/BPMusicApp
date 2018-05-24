@@ -267,6 +267,14 @@ public class MainActivity extends AppCompatActivity implements
                     int indexTrack=datamap.getInt("indexTrack");
                     playTrack(idTrack, indexTrack);
                 }
+
+                if(path.equals("/NextTrack")){
+                    nextTrack();
+                }
+
+                if(path.equals("/PreviousTrack")){
+                    previousTrack();
+                }
             }
         }
     }

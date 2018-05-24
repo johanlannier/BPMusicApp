@@ -13,6 +13,7 @@ import android.support.wearable.view.GridViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -151,6 +152,45 @@ public class MainActivity extends WearableActivity implements
         adapterListMusics =  new AdapterListMusics(this, listTracks);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mHeartRateSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+
+
+        //NEXT SONG
+        ImageView imageViewSongAfter=(ImageView) findViewById(R.id.imageViewSongAfter);
+        imageViewSongAfter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PutDataMapRequest dataMap = PutDataMapRequest.create("/NextTrack");
+                dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+                PutDataRequest request = dataMap.asPutDataRequest();
+                request.setUrgent();
+                Task<DataItem> dataItemTask = Wearable.getDataClient(MainActivity.this).putDataItem(request);
+                dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+                    @Override
+                    public void onSuccess(DataItem dataItem) {
+                        Log.e("NEXT_SONG","envoi reussi, Next Song");
+                    }
+                });
+            }
+        });
+
+        //PREVIOUS SONG
+        ImageView imageViewSongBefore=(ImageView) findViewById(R.id.imageViewSongBefore);
+        imageViewSongBefore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PutDataMapRequest dataMap = PutDataMapRequest.create("/PreviousTrack");
+                dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+                PutDataRequest request = dataMap.asPutDataRequest();
+                request.setUrgent();
+                Task<DataItem> dataItemTask = Wearable.getDataClient(MainActivity.this).putDataItem(request);
+                dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+                    @Override
+                    public void onSuccess(DataItem dataItem) {
+                        Log.e("NEXT_SONG","envoi reussi, Previous Song");
+                    }
+                });
+            }
+        });
 
         StartSensor();
 
