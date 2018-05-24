@@ -134,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void previousTrack(){
-        if(index != 0){
-            playTrack(listTracks.get(index - 1).getId(), index - 1);
+        if(index > 1){
+            playTrack(listTracks.get(index - 2).getId(), index - 2);
         }
     }
 
