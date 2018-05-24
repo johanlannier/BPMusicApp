@@ -3,11 +3,21 @@ package fr.lannier.iem.bpmusicapp.Activity.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
+
+import fr.lannier.iem.bpmusicapp.MainActivity;
 import fr.lannier.iem.bpmusicapp.R;
 
 public class Player extends Fragment {
@@ -55,7 +65,7 @@ public class Player extends Fragment {
         imageViewSongBefore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                PreviousSong();
             }
         });
 
@@ -64,6 +74,7 @@ public class Player extends Fragment {
         imageViewPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PlayPause();
                 isPlay = !isPlay;
                 if (isPlay) {
                     imageViewPlay.setImageResource(R.drawable.pause);
@@ -80,7 +91,7 @@ public class Player extends Fragment {
         imageViewSongAfter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                NextSong();
             }
         });
 
@@ -106,6 +117,47 @@ public class Player extends Fragment {
         return v;
     }
 
+    public void NextSong(){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/NextTrack");
+        dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(v.getContext()).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("NEXT_SONG","envoi reussi, Next Song");
+            }
+        });
+    }
+
+    public void PreviousSong(){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/PreviousTrack");
+        dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(v.getContext()).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("NEXT_SONG","envoi reussi, Previous Song");
+            }
+        });
+    }
+
+    public void PlayPause(){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/PlayPause");
+        dataMap.getDataMap().putLong("Time", System.currentTimeMillis());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(v.getContext()).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("NEXT_SONG","envoi reussi, Play/Pause");
+            }
+        });
+    }
 
     @Override
     public void onAttach(Context context) {
