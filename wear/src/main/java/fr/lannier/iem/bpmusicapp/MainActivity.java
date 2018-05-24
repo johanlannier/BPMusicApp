@@ -109,7 +109,11 @@ public class MainActivity extends WearableActivity implements
                 resetTracks(tmpBPM);
             }
         } else {
-            textViewRythmeDefined.setText(BPMSingleton.getInstance().getBPM() + " 🎵");
+            if(BPMSingleton.getInstance().getBPM() != currentBPMDefined) {
+                currentBPMDefined = BPMSingleton.getInstance().getBPM();
+                textViewRythmeDefined.setText(BPMSingleton.getInstance().getBPM() + " 🎵");
+                resetTracks(currentBPMDefined);
+            }
         }
         currentBPM=mHeartRate;
         SendBPMToPhone();
