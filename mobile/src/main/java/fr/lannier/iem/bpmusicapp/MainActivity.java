@@ -275,6 +275,10 @@ public class MainActivity extends AppCompatActivity implements
                 if(path.equals("/PreviousTrack")){
                     previousTrack();
                 }
+
+                if(path.equals("/PlayPause")){
+                    resumePause();
+                }
             }
         }
     }
