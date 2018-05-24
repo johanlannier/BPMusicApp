@@ -235,10 +235,16 @@ public class MainActivity extends AppCompatActivity implements
                 if(path.equals("/BPM")){
                     byte[] data=event.getDataItem().getData();
                     TextView bpm=findViewById(R.id.BPM);
-                    String bpmData=new String(data);
-                    bpmData=bpmData.substring(bpmData.length()-3,bpmData.length());
-                    bpmData=bpmData.replace(" ","");
+                    DataMap datamap=DataMap.fromByteArray(data);
+                    String bpmData=datamap.getString("BPM");
                     bpm.setText(bpmData);
+                }
+
+                if(path.equals("/PlayTrack")){
+                    byte[] data=event.getDataItem().getData();
+                    DataMap datamap=DataMap.fromByteArray(data);
+                    String idTrack=datamap.getString("Track");
+                    mPlayer.playUri(null, "spotify:track:"+idTrack,0,0); //a replacer par méthode de Nico
                 }
             }
         }

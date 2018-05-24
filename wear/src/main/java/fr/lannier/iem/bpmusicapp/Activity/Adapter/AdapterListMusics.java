@@ -13,10 +13,11 @@ import java.util.List;
 import fr.lannier.iem.bpmusicapp.Models.Track;
 
 public class AdapterListMusics extends ArrayAdapter<Track> {
-
+    List<Track> listTracks;
 
     public AdapterListMusics(Context context , List<Track> objects) {
         super(context,0, objects);
+        listTracks=objects;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class AdapterListMusics extends ArrayAdapter<Track> {
             convertView.setTag(viewHolder);
         }
 
-        Track music = getItem(position);
+        Track music = listTracks.get(position);
         viewHolder.textViewTitre.setText(music.getName());
         viewHolder.textViewArtiste.setText(music.getArtists());
         viewHolder.textViewDuration.setText(music.getDuration());

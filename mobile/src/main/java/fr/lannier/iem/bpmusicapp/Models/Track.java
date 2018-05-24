@@ -8,12 +8,12 @@ public class Track {
     private String name;
     private int bpm;
     private String artists;
-    private int duration;
+    private String duration;
 
     public Track() {
     }
 
-    public Track(String id, String name, int bpm, String artists, int duration) {
+    public Track(String id, String name, int bpm, String artists, String duration) {
         this.id = id;
         this.name = name;
         this.bpm = bpm;
@@ -53,11 +53,11 @@ public class Track {
         this.artists = artists;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -65,13 +65,13 @@ public class Track {
         DataMap tmp=new DataMap();
         tmp.putString("id",this.id);
         tmp.putString("name",this.name);
-        tmp.putLong("bpm",this.bpm);
+        tmp.putInt("bpm",this.bpm);
         tmp.putString("artists",this.artists);
-        tmp.putInt("duration",this.duration);
+        tmp.putString("duration",this.duration);
         return tmp;
     }
 
     public Track(DataMap data){
-        this(data.getString("id"), data.getString("name"), data.getInt("bpm"),data.getString("artists"), data.getInt("duration"));
+        this(data.getString("id"), data.getString("name"), data.getInt("bpm"),data.getString("artists"), data.getString("duration"));
     }
 }

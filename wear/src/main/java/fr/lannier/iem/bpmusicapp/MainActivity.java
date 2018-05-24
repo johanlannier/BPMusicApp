@@ -12,6 +12,7 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 import android.support.wearable.view.GridViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -104,12 +105,19 @@ public class MainActivity extends WearableActivity implements
             textViewRythmeDefined.setText(BPMSingleton.getInstance().getBPM() + "");
         }
         currentBPM=mHeartRate;
+        SendBPMToPhone();
     }
 
     public void Refresh(final List<Track> pListMusic){
         AdapterListMusics adapter  = new AdapterListMusics(this, pListMusic);
-        listViewMusics = (ListView) view.findViewById(R.id.listViewMusics);
+        listViewMusics = (ListView) findViewById(R.id.listViewMusics);
         listViewMusics.setAdapter(adapter);
+        listViewMusics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SendSelectedTrack(pListMusic.get(position));
+            }
+        });
     }
 
     public void SendBPMToPhone(){
@@ -169,6 +177,20 @@ public class MainActivity extends WearableActivity implements
             }
         }
         Log.e("TEST","data changed");
+    }
+
+    public void SendSelectedTrack(final Track track){
+        PutDataMapRequest dataMap = PutDataMapRequest.create("/PlayTrack");
+        dataMap.getDataMap().putString("Track", track.getId());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+        dataItemTask.addOnSuccessListener(new OnSuccessListener<DataItem>() {
+            @Override
+            public void onSuccess(DataItem dataItem) {
+                Log.e("PLAYING","envoi reussi, Track ID: "+track.getId()+", Name: "+track.getName());
+            }
+        });
     }
 
     private void setupViews() {
